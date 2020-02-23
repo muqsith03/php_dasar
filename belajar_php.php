@@ -81,9 +81,59 @@
                 <p>hasil : <span id="hasil-latihan-3"></span></p>
             </div>
         </div>
+        <hr>
 
+        <!-- Pengeulangan -->
+        <!-- pengulangan FOR -->
+        <div class="row">
+            <div class="col-md-6">
+                <h4>pengulangan menggunakan FOR</h4>
+                <p>syarat untuk pengulangan for adalah kondisi akhir pengulangan harus diketahui. berikut struktur dasar pengulangan for</p>
+                <p>for(start; kondisi; increment){statement; statment;}</p>
+                <p>pilih tanggal<select name="hari" id="tanggal">
+                <?php
+                    // pengulangan untuk tanggal
+                    for($i = 1; $i <= 31; $i++){
+                        echo "<option value= '$i'>$i</option>";
+                    }
+                
+                ?>
+                </select>
+                </p>
+                <p><select name="bulan" id="bulan">
+                    
+                </select></p>
+                <h4>pengulangan menggunakan WHILE</h4>
+                <p>jika untuk pengulangan yang tidak diketahui berapa kali kita akan menggunakan pengulangan. kita mengguanakan WHILE. pengulangan while cocok digunakan untuk situasi dimana untuk situasi akhir kondisi belum diketahui pada saat pengulangan ditulis.</p>
 
+            </div>
+        </div>
+        
+        <div class="row">
+            <div class="col-md-6">
+            <h4>membuat variadic function dengan fungsi bawaan php</h4>
+            <?php
+                function penambahan(){
+                    $array_argumen = func_get_args();
+                    $jumlah_argumen = func_num_args();
+                    $nilai_argumen_ke_2 = func_get_arg(1);
 
+                    echo "array argumen : ";
+                    print_r($array_argumen);
+                    echo "<br>";
+
+                    echo "jumlah argumen : $jumlah_argumen <br>";
+                    echo "nilai argumen ke-2 : $nilai_argumen_ke_2";
+                }
+
+                penambahan(1,2);
+                echo "<br>";
+                penambahan(5,4,3,2,1);
+                echo "<br>";
+                penambahan(0,6,8,19);
+            ?>
+            </div>
+        </div>
 
 
 
