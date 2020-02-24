@@ -131,8 +131,22 @@
                 penambahan(5,4,3,2,1);
                 echo "<br>";
                 penambahan(0,6,8,19);
+                echo "<br>";
+
+                echo number_format(12500), "<br>";
+                echo number_format(1000000), "<br>";
+                echo number_format(1200000), "<br>";
+                echo floor(12.5);
+                echo ceil(10.2), "<br>";
+                echo "<a href='home.php'>link ke halaman home</a> <br>";
+                $alamat_link = ["home.php", "kategori.php", "shop.php"];
+                $judul_link = ["home", "kategori", "shop"];
+
+                for($i = 0; $i < count($alamat_link); $i++):
             ?>
+                <a href="<?=$alamat_link[$i];?>"><?=$judul_link[$i]; ?></a>
             </div>
+            <?php endfor?>
         </div>
 
 
