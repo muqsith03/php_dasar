@@ -133,6 +133,25 @@
                 penambahan(0,6,8,19);
             ?>
             </div>
+            <div class="col-md-6">
+                <h4>variadic function dengan splat operator</h4>
+                <p>splat operator adalah sebutan untuk karakter titik tiga kali (...), operator ini disebut juga sebagai spread syntax.</p>
+                <?php
+                function splatFunction(...$array_argumen){
+                    $hasil = 0;
+                    foreach($array_argumen as $value){
+                        $hasil = $hasil + $value;
+                        
+                    }
+                    return $hasil;
+                }
+                echo splatFunction(1,2);
+                echo "<br>";
+                echo splatFunction(5,4,3,2,1);
+                echo "<br>";
+                echo splatFunction(0,6,8,19);
+                ?>
+            </div>
         </div>
 
 
