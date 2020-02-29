@@ -105,6 +105,9 @@
 
             }
 
+            $refactor_tgl = cari_selisih_tanggal_v2("15-04-1995", "today");
+            echo "sekarang umur anda adalah {$refactor_tgl['tahun']} tahun, {$refactor_tgl['bulan']} bulan, {$refactor_tgl['hari']} hari";
+
         ?>
 
 
