@@ -1,6 +1,6 @@
 <?php 
 
-    if(!isset($_POST["submti"])){
+    if(!isset($_POST["submit"])){
         header("Location: form_1.php");
 
     }
@@ -14,11 +14,11 @@
     $isi_form = "&$query_nama&$query_email";
 
     // cek apakah form nama kosong atau tidak
-    if(empty($email) & empty($nama)){
-        $pesan= urlencode("nama dan email masih kosong");
-        header("Location: form_1.php?pesan={$pesan}{$isi_form}");
-        die();
-    }
+    // if(empty($email) AND empty($nama)){
+    //     $pesan= urlencode("nama dan email masih kosong");
+    //     header("Location: form_1.php?pesan={$pesan}{$isi_form}");
+    //     die();
+    // }
     if(empty($nama)){
         $pesan = urlencode("form nama harus diisi");
         header("Location: form_1.php?pesan={$pesan}{$isi_form}");
@@ -27,7 +27,7 @@
     // cek apakah form email kosong atau tidak
     if(empty($email)){
         $pesan = urlencode("form email harus diisi");
-        header("Location: form_1.php?pesan=$pesan");
+        header("Location: form_1.php?pesan={$pesan}{$isi_form}");
         die();
     }
 ?>

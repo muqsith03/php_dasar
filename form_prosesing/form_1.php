@@ -35,8 +35,8 @@
         <h4>Latihan Form : menampilkan pesan kesalahan form</h4>
         <form action="proses_1.php" method="POST">
             <?=$pesan; ?>
-            <p>Nama : <input type="text" name="nama" id="nama"<?=$nilai_nama ?>></p>
-            <p>email : <input type="text" name="email" id="email" <?=$nilai_email ?>></p>
+            <p>Nama : <input type="text" name="nama" id="nama" value="<?=$nilai_nama ?>"></p>
+            <p>email : <input type="text" name="email" id="email" value="<?=$nilai_email ?>"></p>
             <p><input type="submit" name="submit" id="submit" value="Submit"></p>
         </form>
 
