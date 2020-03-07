@@ -1,25 +1,4 @@
 
-<?php
-
-    $nama = htmlentities(strip_tags(trim($_POST["nama"])));
-    $email = htmlentities(strip_tags(trim($_POST["email"])));
-    $buku = htmlentities(strip_tags(trim($_POST["buku"])));
-    $jumlah = htmlentities(strip_tags(trim($_POST["jumlah"])));
-    $alamat = htmlentities(strip_tags(trim($_POST["alamat"])));
-    $kurir = htmlentities(strip_tags(trim($_POST["kurir"])));
-    $ongkir = htmlentities(strip_tags(trim($_POST["ongkir"])));
-    $tgl = htmlentities(strip_tags(trim($_POST["tgl"])));
-    $bln = htmlentities(strip_tags(trim($_POST["bln"])));
-    $thn = htmlentities(strip_tags(trim($_POST["thn"])));
-?>
-
-
-
-
-
-
-
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -83,7 +62,7 @@
                 <td><?php echo "Rp. ".number_format($ongkir,2,",","."); ?></td>
             </tr>
             <tr>
-                <td><?php echo "$tgl - $bln - $thn"; ?></td>
+                <td><?php echo date("d-F-Y", strtotime("$tgl-$bln-$thn")); ?></td>
             </tr>
             <tr>
                 <td><?php echo "$tambahan_dvd $tambahan_kado"; ?></td>
