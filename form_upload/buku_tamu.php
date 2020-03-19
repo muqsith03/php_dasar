@@ -16,9 +16,23 @@
 </head>
 <body>
 <div class="container">
+
     <h1>buku tamu </h1>
-    <img src="folder_upload/markus-spiske-JT1AI1nKWhg-unsplash.jpg" class="img-fluid" width="100%" height="40px">
-    
-</div>
+    <table>
+    <img src="folder_upload\pp.jpg" class="img-fluid" width="900px" height="20%">
+    <tr>
+        <td>Nama</td>
+        <td><?=$nama; ?></td>
+    </tr>
+    <tr>
+        <td>Email</td>
+        <td><?=$email; ?></td>
+    </tr>
+    <tr>
+        <td>Komentar</td>
+        <td><?= $komentar; ?></td>
+    </tr>
+    </table>
+</div> 
 </body>
 </html>
