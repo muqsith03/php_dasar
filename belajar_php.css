@@ -3,3 +3,11 @@
     height: auto;
     width: 0px;
 }
+#footer{
+    height: 50px;
+    line-height: 50px;
+    background: #333333;
+    color: #ffffff;
+    font-size: 10px;
+    text-align: center;
+}

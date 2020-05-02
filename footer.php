@@ -1,6 +1,6 @@
     <!-- footer dari website -->
-    <footer>
-        <?php echo "<p>Copyright fajar 2020</p>" ?>
+    <footer id="footer">
+        <?php echo "<p><i>Copyright fajar 2020</i></p>" ?>
     </footer>
     <!-- akhir footer  -->
 </div>
