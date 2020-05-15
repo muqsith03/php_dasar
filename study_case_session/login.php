@@ -21,10 +21,17 @@ if(isset($_POST["submit"])) {
     if($username!= "admin" OR $password!= "rahasia") {
         $pesan_error .= "username dan/atau password tidak sesuai";
     }
-    // jika lolos validasi, set cookie
+    // jika lolos validasi, set cookie / session
     if($pesan_error === "") {
-        setcookie("username", "admin");
-        setcookie("nama", "fajar");
+        // cookie
+        // setcookie("username", "admin");
+        // setcookie("nama", "fajar");
+        
+        // session
+        session_start();
+        $_SESSION["nama"] = "fajar";
+        $_SESSION["hak_akses"] = "admin";
+        
         header("Location: data_siswa.php");
     }
 } else {
