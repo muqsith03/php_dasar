@@ -3,6 +3,10 @@
     setcookie("kota", "jakarta");
     echo "cookie berhasil di set";
 
+    // hapus cookie
+    unset($_COOKIE["nama"]);
+    unset($_COOKIE["kota"]);
+    
     // include file header
     include_once("header.php");
     
