@@ -32,6 +32,42 @@
         $dbname = "universitas"; <br>
         $koneksi = mysqli_connect($dbhost, $dbname, $dbuser, $dbname);
         </p>
+        <h4>function mysqli_connect_errno() dan mysqli_connect_error()</h4>
+        <p>
+            kedua fungsi ini dipakai untuk menampilkan pesan error jika koneksi antara php dengan mysql mengalami masalah. mysqli_connect_errno() akan menampilkan empat digit angka kode error mysql, sedangkan mysqli_connect_error() akan menampilkan pesan errornya.<br>
+            contoh : <br>
+            $dbhost = "localhost";<br>
+            $dbuser = "root";<br>
+            $dbpass = "";<br>
+            $dbname = "belumada";<br>
+            $koneksi = mysqli_connect($dbhost,$dbuser,$dbpass,$dbname);<br>
+            
+            note:periksa koneksi, tampilkan pesan kesalahan jika gagal<br>
+            if(!$koneksi){
+                die("koneksi dengan database gagal : ".mysqli_connect_errno(). " - ".mysqli_connect_error());
+            }<br>
+            walaupun pesan error ini sangat membantu selama perencangan kode program, untuk site "live" sebaiknya tidak melakukan hal ini. karena pesan error dapat dipelajari oleh orang yang tidak bertanggung jawab.
+        </p>
+        <h4>function mysqli_close()</h4>
+        <p>
+            fungsi ini kebalikan dari mysqli_connect, fungsi in akan menutup koneksi antara php dengan mysql dan membebaskan memory yang dipakai untuk proses koneksi tersebut. fungsi ini diletakan dibaris paling akhir atau dimana kita tidak membutuhkan lagi mengakses database.
+            fungsi ini hanya membutuhkan 1 argumen yakni variable handle yg digunakan ketika memanggil fungsi mysqli_connect(). 
+        </p>
+        <h4>function mysqli_query()</h4>
+        <p>
+            fungsi ini digunakan untuk menjalakan perintah query(perintah sQL). fungsi ini butuh 2 argumen, argumen pertama variable handle yang didapat dari hasil pemanggilan fungsi mysqli_connect(), dan argumen kedua adalah perintah query dalam bentuk string.<br>
+            tips untuk menghindari kesalahan penulisan pada saat query : <br>
+            <ul>
+                <li>pisahkan penulisan query kedalam sebuah variable. variable ini nantinya kita input sebagai argumen. contoh : $query = "SELECT * FROM mahasiswa"<br>
+                hasil_query = mysqli_query($koneksi, $query);</li>
+                <li>periksa query dengan menjalankan perintah echo ke variable query</li>
+                <li>copy hasil dari echo dan jalankan di cmd mysql atau phpmyadmin. langkah ini sangat penting, pastikan query berjalan seperti yang diharapkan</li>
+            </ul>
+        </p>
+        <h4>funciton mysqli_free_result()</h4>
+        <p>
+            fungsi ini berguna untuk mengosongkan memory ketika hasil query sudah selesai dijalankan. dengan kata lain, fungsi ini akan menghapus memory yang digunakan oleh mysqli_query(). sama seperti mysqli_close(), fungsi ini juga bersifat opsional, apabila tidak ditulis php secara otomatis mengosongkan memory pada saat halaman selesai diproses.
+        </p>
     </div>
 </body>
 </html>
