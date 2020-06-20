@@ -2,21 +2,51 @@
     // buat koneksi ke mysql dari file koneksi.php
     include_once("koneksi.php");
 
-    // filter dengan mysqli_real_escape_string
-    $username = mysqli_real_escape_string($koneksi,$username);
-    $password = mysqli_real_escape_string($koneksi,$password);
+    // jika button login dipilih
+    if (isset($_POST["submit"])) {
 
-    // generate hashing
-    $password_sha1 = sha1($password);
+        // ambil element username dan password
+        $username = htmlentities(strip_tags(trim($_POST["username"])));
+        $password = htmlentities(strip_tags(trim($_POST["password"])));
+        // siapkan variable pesan error
+        $pesan_error = "";
 
-    // cek apakah username dan password ada di table admin
-    $query = "SELECT * FROM admins WHERE username = '$username' AND pass = '$password_sha1'";
-    $result = mysqli_query($koneksi,$query);
+        // cek apakah username sudah diisi atau tidak
+        if(empty($username)){
+            $pesan_error .= "username belum diisi <br>";
+        }
+        if(empty($password)){
+            $pesan_error .= "password belum diisi <br>";
+        }
+        
+        // filter dengan mysqli_real_escape_string
+        $username = mysqli_real_escape_string($koneksi, $username);
+        $password = mysqli_real_escape_string($koneksi, $password);
 
-    $pesan_error = "";
-    if(mysqli_num_rows($result) == 0){
-        // data tidak ditemukan, buat pesan error
-        $pesan_error .= "username dan/atu paas" 
+        // generate hashing
+        $password_sha1 = sha1($password);
+
+        // cek apakah username dan password ada di table admin
+        $query = "SELECT * FROM admins WHERE username = '$username' AND pass = '$password_sha1'";
+        $result = mysqli_query($koneksi, $query);
+
+        if (mysqli_num_rows($result) == 0) {
+            // data tidak ditemukan, buat pesan error
+            $pesan_error .= "username dan/atau password tidak ditemukan";
+        }
+
+        // jika lolos validasi, set session dan redirect ke halaman tampil_mahasiswa
+        if($pesan_error === ""){
+            // start session
+            session_start();
+            $_SESSION["nama"] = $username;
+            header("Location: tampil_mahasiswa.php");
+        }
+    } else{
+        // form belum disubmit atau halaman baru pertama kali muncul, berikan nilai awalan untuk semua form dan pesan error
+        $username = "";
+        $password = "";
+        $pesan_error = "";
     }
 
 ?>
@@ -25,7 +55,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>studi casus : form login dengan session & cookie</title>
+    <title>studi casus : kampusku</title>
     <style>
         body{
             background-color: #f8f8f8;
@@ -74,7 +104,7 @@
 <body>
     <div class="container">
         <h1>selamat datang</h1>
-        <h3>website sekolah sma islamic village</h3>
+        <h3>Sistem Informasi Kampusku</h3>
         <?php
         // tampilkan error jika ada
             if($pesan_error !== ""){
@@ -82,7 +112,7 @@
             }
         ?>
         <!-- form -->
-        <form action="login.php" method="post">
+        <form action="halaman_login.php" method="post">
             <fieldset>
                 <legend>Login</legend>
                 <p>
