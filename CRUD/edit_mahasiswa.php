@@ -5,53 +5,29 @@
     if(!isset($_SESSION["nama"])){
         header("Location: halaman_login.php");
     }
-
-    // buka koneksi mysql
+    // buka koneksi dengan mysql, include file koneksi.php
     include_once "koneksi.php";
 
     // ambil pesan jika ada
     if(isset($_GET["pesan"])){
         $pesan = $_GET["pesan"];
     }
-    
-    // cek apakah form cari telah disubmit
+
+    // cek apakah form telah disubmit
     // berasal dari form pencarian, siapkan query
     if(isset($_GET["cari"])){
         // ambil nilai nama
         $nama = htmlentities(strip_tags(trim($_GET["nama"])));
-        // filter untuk $nama mencegah sql injection
+        // filter agar tidak sql inject
         $nama = mysqli_real_escape_string($koneksi,$nama);
-        // buat query pencarian
+        // siapkan query  untuk cari
         $query = "SELECT * FROM mahasiswa WHERE nama LIKE '%$nama%' ORDER BY nama ASC";
         // buat pesan
         $pesan = "hasil pencarian untuk nama <b>'$nama'</b>";
     } else {
-        // buklan dari form pencarian
+        // bukan dari form pencarian
         // siapkan query untuk menampilkan seluruh data dari tabel mahasiswa
         $query = "SELECT * FROM mahasiswa ORDER BY nama ASC";
-    }
-
-    // cek apakah form hapus telah disubmit
-    // berasal dari form pencarian
-    if(isset($_POST["hapus"])){
-        //ambil nilai nim
-        $nim = htmlentities(strip_tags(trim($_POST["nim"])));
-        // filter data
-        $nim = mysqli_real_escape_string($koneksi,$nim);
-
-        // jalankan query DELETE
-        $query = "DELETE FROM mahasiswa WHERE nim = '$nim'";
-        $hasil_query = mysqli_query($koneksi,$query);
-
-        // periksa query, tampilkan kesalahan jika gagal
-        if($hasil_query){
-            // delete berhasil,redirect ke tampil_mahasiswa.php + pesan
-            $pesan = "Mahasiswa dengan nim <b>'$nim'</b> berhasil dihapus";
-            $pesan = urlencode($pesan);
-            header("Location: tampil_mahasiswa.php?pesan={$pesan}");
-        }else{
-            die("query gagal dijalankan: ".mysqli_errno($koneksi)." - ".mysqli_error($koneksi));
-        }
     }
 
 ?>
@@ -76,13 +52,13 @@
                 <ul class="navbar-nav">
                     <li class="nav-item-active mr-5"><a href="tampil_mahasiswa.php" class="nav-link">Tampil</a></li>
                     <li class="nav-item-active mr-5"><a href="menambahkan_data.php" class="nav-link">Tambah</a></li>
-                    <li class="nav-item-active mr-5"><a href="edit_mahasiswa.php" class="nav-link">Edit</a></li>
-                    <li class="nav-item-active mr-5"><a href="" class="nav-link">Hapus</a></li>
+                    <li class="nav-item-active mr-5"><a href="" class="nav-link">Edit</a></li>
+                    <li class="nav-item-active mr-5"><a href="hapus_mahasiswa.php" class="nav-link">Hapus</a></li>
                     <li class="nav-item-active mr-5"><a href="" class="nav-link">Logout</a></li>
                 </ul>
                 <!-- search bar -->
                 <nav class="navbar navbar-light bg-light ml-5">
-                    <form action="hapus_mahasiswa.php" method="get" class="form-inline">
+                    <form action="tampil_mahasiswa.php" method="get" class="form-inline">
                         Cari Data<input type="search" name="nama" id="nama" class="form-control">
                         <input class="btn btn-outline-success my-2 my-sm-0" type="submit" name="cari" value="Search">
                     </form>
@@ -127,13 +103,12 @@
                         echo "<td>$hasil_query[fakultas]</td>";
                         echo "<td>$hasil_query[jurusan]</td>";
                         echo "<td>$hasil_query[ipk]</td>";
-                        echo "<td>";
-                        ?>
-                        <form action="hapus_mahasiswa.php" method="POST">
-                            <input type="hidden" name="nim" id="nim" value="<?=$hasil_query["nim"]; ?>">
-                            <input type="submit" name="hapus" value="Hapus">
+                        echo "<td>"; ?>
+                        <form action="form_edit.php" method="post">
+                            <input type="hidden" name="nim" id="nim" value="<?=$hasil_query["nim"]?>">
+                            <input type="submit" name="edit" id="edit" value="Edit">
                         </form>
-                <?php
+                        <?php 
                         echo "</td>";
                         echo"</tr>";
                     endwhile;
