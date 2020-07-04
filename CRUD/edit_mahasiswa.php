@@ -30,6 +30,7 @@
         $query = "SELECT * FROM mahasiswa ORDER BY nama ASC";
     }
 
+
 ?>
 
 <!DOCTYPE html>
@@ -54,7 +55,7 @@
                     <li class="nav-item-active mr-5"><a href="menambahkan_data.php" class="nav-link">Tambah</a></li>
                     <li class="nav-item-active mr-5"><a href="" class="nav-link">Edit</a></li>
                     <li class="nav-item-active mr-5"><a href="hapus_mahasiswa.php" class="nav-link">Hapus</a></li>
-                    <li class="nav-item-active mr-5"><a href="" class="nav-link">Logout</a></li>
+                    <li class="nav-item-active mr-5"><a href="logout.php" class="nav-link">Logout</a></li>
                 </ul>
                 <!-- search bar -->
                 <nav class="navbar navbar-light bg-light ml-5">
@@ -106,7 +107,7 @@
                         echo "<td>"; ?>
                         <form action="form_edit.php" method="post">
                             <input type="hidden" name="nim" id="nim" value="<?=$hasil_query["nim"]?>">
-                            <input type="submit" name="edit" id="edit" value="Edit">
+                            <input type="submit" name="submit" id="edit" value="Edit">
                         </form>
                         <?php 
                         echo "</td>";

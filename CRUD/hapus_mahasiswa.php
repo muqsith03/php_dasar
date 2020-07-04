@@ -32,7 +32,6 @@
     }
 
     // cek apakah form hapus telah disubmit
-    // berasal dari form pencarian
     if(isset($_POST["hapus"])){
         //ambil nilai nim
         $nim = htmlentities(strip_tags(trim($_POST["nim"])));
@@ -78,7 +77,7 @@
                     <li class="nav-item-active mr-5"><a href="menambahkan_data.php" class="nav-link">Tambah</a></li>
                     <li class="nav-item-active mr-5"><a href="edit_mahasiswa.php" class="nav-link">Edit</a></li>
                     <li class="nav-item-active mr-5"><a href="" class="nav-link">Hapus</a></li>
-                    <li class="nav-item-active mr-5"><a href="" class="nav-link">Logout</a></li>
+                    <li class="nav-item-active mr-5"><a href="logout.php" class="nav-link">Logout</a></li>
                 </ul>
                 <!-- search bar -->
                 <nav class="navbar navbar-light bg-light ml-5">

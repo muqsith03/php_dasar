@@ -9,19 +9,55 @@
     // buka koneksi dengan mysql
     include_once "koneksi.php";
 
+
     // cek apakah form telah disubmit
     if(isset($_POST["submit"])){
-        // form telah disubmit, proses data
+        // form telah disubmit, cek apakah berasal dari edit_mahasiswa.php
+        // atau dari update dari form_edit.php
 
-        // ambil semua nilai form
-        $nim = htmlentities(strip_tags(trim($_POST["nim"])));
-        $nama = htmlentities(strip_tags(trim($_POST["nama"])));
-        $tempat_lahir = htmlentities(strip_tags(trim($_POST["tempat_lahir"])));
-        $tanggal_lahir = htmlentities(strip_tags(trim($_POST["tanggal_lahir"])));
-        $fakultas = htmlentities(strip_tags(trim($_POST["fakultas"])));
-        $jurusan = htmlentities(strip_tags(trim($_POST["jurusan"])));
-        $ipk = htmlentities(strip_tags(trim($_POST["ipk"])));
+        if($_POST['submit']=="Edit"){
+            // niali form berasal dari halaman edit_mahasiswa.php
 
+            // ambil data nilai nim
+            $nim = htmlentities(strip_tags(trim(($_POST["nim"]))));
+            // filter data agar tidak di inject sql
+            $nim = mysqli_real_escape_string($koneksi, $nim);
+
+            // ambil semua data dari database untuk menjadi nilai awal form
+            $query = "SELECT * FROM mahasiswa WHERE nim = '$nim'";
+            $result = mysqli_query($koneksi,$query);
+
+            if(!$result){
+                die("Query Error: ".mysqli_errno($koneksi)." - ".mysqli_error($koneksi));
+            }
+
+            // tidak perlu pakai perulangan while, karena hanya ada 1 data record
+            $data = mysqli_fetch_assoc($result);
+
+            $nama = $data["nama"];
+            $tempat_lahir = $data["tempat_lahir"];
+            $tanggal_lahir = $data["tanggal_lahir"];
+            $fakultas = $data["fakultas"];
+            $jurusan = $data["jurusan"];
+            $ipk = $data["ipk"];
+
+            // bebask memory
+            mysqli_free_result($result);
+
+        } else if($_POST["submit"]=="Update Data"){
+            // nilai form berasal dari halaman form_edit.php
+            // ambil semua niali form
+            $nim           = htmlentities(strip_tags(trim($_POST["nim"])));
+            $nama          = htmlentities(strip_tags(trim($_POST["nama"])));
+            $tempat_lahir  = htmlentities(strip_tags(trim($_POST["tempat_lahir"])));
+            $tanggal_lahir = htmlentities(strip_tags(trim($_POST["tanggal_lahir"])));
+            $fakultas      = htmlentities(strip_tags(trim($_POST["fakultas"])));
+            $jurusan       = htmlentities(strip_tags(trim($_POST["jurusan"])));
+            $ipk           = htmlentities(strip_tags(trim($_POST["ipk"])));
+            
+        }
+
+        // proses validasi form
         // siapkan variable untuk menampung pesan error
         $pesan_error = "";
 
@@ -32,18 +68,6 @@
         // nim harus angka dengan 8 digit
         else if(!preg_match("/^[0-9]{8}$/",$nim)) {
             $pesan_error .= "Nim harus berupa 8 digit angka <br>";
-        }
-
-        // cek ke database apakah nim ada yang sama
-        // filter data $nim
-        $nim = mysqli_real_escape_string($koneksi,$nim);
-        $query = "SELECT * FROM mahasiswa WHERE nim = '$nim'";
-        $hasil_query = mysqli_query($koneksi,$query);
-
-        // cek jumlah record(baris), jika ada, $nim tidak bisa diproses
-        $jumlah_data = mysqli_num_rows($hasil_query);
-        if($jumlah_data >= 1){
-            $pesan_error .= "Nim sudah digunakan <br>";
         }
 
         // cek apakah nama sudah diisi atau tidak
@@ -89,24 +113,29 @@
         }
 
         // jika tidak ada error input ke database
-        if($pesan_error === ""){
+        if(($pesan_error === "") AND ($_POST["submit"]=="Update Data")){
+
+            // buka koneksi dengan Mysql
+            include("koneksi.php");
+
             // filter semua data
-            $nim = mysqli_real_escape_string($koneksi, $nim);
-            $nama = mysqli_real_escape_string($koneksi,$nama);
-            $tempat_lahir = mysqli_real_escape_string($koneksi,$tempat_lahir);
-            $fakultas = mysqli_real_escape_string($koneksi,$fakultas);
+            $nim           = mysqli_real_escape_string($koneksi, $nim);
+            $nama          = mysqli_real_escape_string($koneksi,$nama);
+            $tempat_lahir  = mysqli_real_escape_string($koneksi,$tempat_lahir);
+            $fakultas      = mysqli_real_escape_string($koneksi,$fakultas);
             $tanggal_lahir = mysqli_real_escape_string($koneksi,$tanggal_lahir);
-            $jurusan = mysqli_real_escape_string($koneksi,$jurusan);
-            $ipk = mysqli_real_escape_string($koneksi,$ipk);
+            $jurusan       = mysqli_real_escape_string($koneksi,$jurusan);
+            $ipk           = (float) $ipk;
 
             // buat dan jalankan query insert
-            $query = "INSERT INTO mahasiswa VALUES('$nim','$nama','$tempat_lahir','$tanggal_lahir','$fakultas','$jurusan','$ipk')";
+            $query = "UPDATE mahasiswa SET nama = '$nama', tempat_lahir = '$tempat_lahir', tanggal_lahir = '$tanggal_lahir', fakultas = '$fakultas', jurusan = '$jurusan', ipk = '$ipk' WHERE nim = '$nim'";
+
             $result = mysqli_query($koneksi,$query);
 
             // periksa hasil query
             if($result){
                 // insert berhasil, redirect ke tampil_mahasiswa.php + pesan
-                $pesan = "mahasiswa dengan nama = '<b>$nama</b>' berhasil ditambah ";
+                $pesan = "mahasiswa dengan nama = '<b>$nama</b>' berhasil diupdate ";
                 $pesan = urldecode($pesan);
                 header("Location: tampil_mahasiswa.php?pesan={$pesan}");
             } else {
@@ -115,22 +144,12 @@
         }
         
     } else{
-        // form belum disubmit atau halaman ini tampil untuk pertama kali
-        // berikan nilai awal untuk semua isian form
-        $pesan_error = "";
-        $nim = "";
-        $nama = "";
-        $tempat_lahir = "";
-        $select_kedokteran = "selected";
-        $select_fmipa = ""; 
-        $select_ekonomi = "";
-        $select_teknik = "";
-        $select_sastra = "";
-        $select_fasilkom = "";
-        $jurusan = "";
-        $ipk = "";
-        $tanggal_lahir = "";
+        // form diakses secara langsung!
+        // redirect ke edit_mahasiswa.php
+        header("Location: edit_mahasiswa.php");
+
     }
+
 
 ?>
 
@@ -156,7 +175,7 @@
                     <li class="nav-item-active mr-5"><a href="menambahkan_data.php" class="nav-link">Tambah</a></li>
                     <li class="nav-item-active mr-5"><a href="edit_mahasiswa.php" class="nav-link">Edit</a></li>
                     <li class="nav-item-active mr-5"><a href="hapus_mahasiswa.php" class="nav-link">Hapus</a></li>
-                    <li class="nav-item-active mr-5"><a href="" class="nav-link">Logout</a></li>
+                    <li class="nav-item-active mr-5"><a href="logout.php" class="nav-link">Logout</a></li>
                 </ul>
                 <!-- search bar -->
                 <nav class="navbar navbar-light bg-light ml-5">
@@ -174,13 +193,13 @@
                             echo "<span>$pesan_error</span>";
                         }
                     ?>
-            <form action="menambahkan_data.php" method="post" id="form_mahasiswa">
+            <form action="form_edit.php" method="post" id="form_mahasiswa">
                 <fieldset>
                     <legend>Mahasiswa Baru</legend>
                     <div class="form-row">
                         <div class="form-group col-md-5">
                             <label for="nim">Nim</label>
-                            <input type="text" name="nim" id="nim" class="form-control" placeholder="Conto: 12345678" value="<?= $nim;?>">(8 digit angka)
+                            <input type="text" name="nim" id="nim" class="form-control" value="<?= $nim;?>" readonly>
                         </div>
                     </div>
                         <div class="form-row">
@@ -205,12 +224,12 @@
                             <div class="form-group col-md-5">
                                 <label for="fakultas">Fakultas :</label>
                                 <select name="fakultas" id="fakultas" class="form-control">
-                                    <option value="kedokteran" <?php echo $select_kedokteran; ?>>Kedokteran</option>
-                                    <option value="FMIPA" <?php $select_fmipa; ?>>FMIPA</option>
-                                    <option value="ekonomi" <?php $select_ekonomi; ?>>Ekonomi</option>
-                                    <option value="teknik" <?php $select_teknik; ?>>Teknik</option>
-                                    <option value="sastra" <?php $select_sastra; ?>>Satra</option>
-                                    <option value="fasilkom" <?php $select_fasilkom; ?>>FASILKOM</option>
+                                    <option value="kedokteran" <?= $select_kedokteran; ?>>Kedokteran</option>
+                                    <option value="FMIPA" <?= $select_fmipa; ?>>FMIPA</option>
+                                    <option value="ekonomi" <?= $select_ekonomi; ?>>Ekonomi</option>
+                                    <option value="teknik" <?= $select_teknik; ?>>Teknik</option>
+                                    <option value="sastra" <?= $select_sastra; ?>>Satra</option>
+                                    <option value="fasilkom" <?= $select_fasilkom; ?>>FASILKOM</option>
                                 </select>
                             </div>
                         </div>
@@ -229,7 +248,7 @@
                 </fieldset>
                         <div class="form-row">
                             <div class="form-group">
-                                <input type="submit" name="submit" id="submit" value="Tambah Data" class="btn btn-primary btn-sm">
+                                <input type="submit" name="submit" id="submit" value="Update Data" class="btn btn-primary btn-sm">
                             </div>
                         </div>
             </form>
